@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test jquery speed</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <style>
+      .sample{
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background-color: grey;
+      }
+
+    </style>
+    <script>
+    function add_before()
+    {
+      var cnt = parseInt($("#txt_divcount").val());
+      var childcnt = parseInt($("div_container").children.length);
+      var createID = (document.getElementById("chk_id").checked == true) ? true : false;
+      console.log("children = " + childcnt);
+      while(cnt--)
+      {
+        if (createID)
+        {
+          $("#div_container").prepend($("<div></div>").addClass("sample").attr("id","div_" + (childcnt + cnt)));
+        }
+        else
+        {
+          $("#div_container").prepend($("<div></div>").addClass("sample"));
+        }
+      }
+    }
+
+    function add_after()
+    {
+      var cnt = parseInt($("#txt_divcount").val());
+      var childcnt = parseInt($("div_container").children.length);
+      var createID = (document.getElementById("chk_id").checked == true) ? true : false;
+      console.log("children = " + childcnt);
+      while(cnt--)
+      {
+        if (createID)
+        {
+          $("#div_container").append($("<div></div>").addClass("sample").attr("id","div_" + (childcnt + cnt)));
+        }
+        else
+        {
+          $("#div_container").append($("<div></div>").addClass("sample"));
+        }
+      }
+    }
+
+    function clear_div()
+    {
+      document.getElementById("div_container").innerHTML = '<div id="div_target" class="sample" style="background-color: red">Hello</div>';
+    }
+
+    function test_jquery()
+    {
+      count = parseInt(document.getElementById("txt_iterations").value);
+      var buffer = "";
+      var before = window.performance.now();
+      while(count--)
+      {
+        buffer = $("#div_target").val();
+      }
+      var after = window.performance.now();
+      document.getElementById("txt_display").value = "jquery id time = " + (after - before) + "\n" + $("#txt_display").val()
+    }
+
+    function test_native()
+    {
+      count = parseInt(document.getElementById("txt_iterations").value);
+      var buffer = "";
+      var before = window.performance.now();
+      while(count--)
+      {
+        buffer = document.getElementById("div_target").value;
+      }
+      var after = window.performance.now();
+      document.getElementById("txt_display").value = "native id time = " + (after - before) + "\n" + $("#txt_display").val()
+    }
+
+    function test_jquerynoid()
+    {
+      count = parseInt(document.getElementById("txt_iterations").value);
+      var buffer = "";
+      var before = window.performance.now();
+      while(count--)
+      {
+        buffer = $("css_target").val();
+      }
+      var after = window.performance.now();
+      document.getElementById("txt_display").value = "jquery css time = " + (after - before) + "\n" + $("#txt_display").val()
+    }
+    </script>
+  </head>
+  <body>
+    <div>
+      <input id="txt_iterations" type="text" value="1000"/>
+      <button onclick="test_jquery()">Test jQuery</button>
+      <button onclick="test_native()">Test native</button>
+      <button onclick="test_jquerynoid()">Test jQuery with css selector</button>
+    </div>
+    <div>
+      <button onclick="clear_div()">Clear Div</button>
+      <button onclick="add_before()">Add Div</button>
+      <input id="txt_divcount" type="text" />
+      <button onclick="add_after()">Add Div</button>
+      <input type="checkbox" id="chk_id" />Include ID
+    </div>
+    <div>
+      <textarea id="txt_display" rows="8" cols="40"></textarea>
+    </div>
+    <div>
+      <div id="div_container">
+        <div id="div_target" class="sample css_target" style="background-color: red">Hello</div>
+      </div>
+    </div>
+
+  </body>
+</html>
